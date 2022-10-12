@@ -109,7 +109,7 @@ public class ZombieAI : MonoBehaviour
 
     }
 
-    /*
+    
     private void Patroling()
     {
         if (m_PlayerNear)
@@ -146,7 +146,7 @@ public class ZombieAI : MonoBehaviour
             }
         }
     }
-    */
+    
     void Move(float speed)
     {
         // run animation starts
