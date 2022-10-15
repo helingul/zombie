@@ -41,8 +41,10 @@ public class ZombieAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         //initialize animation
         animator = GetComponent<Animator>();
+        animator.SetBool("isMoving", true);
 
         m_PlayerPosition = Vector3.zero;
         m_IsPatrol = true;
@@ -63,6 +65,7 @@ public class ZombieAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         EnviromentView();
         if(!m_IsPatrol)
         {

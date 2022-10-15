@@ -38,7 +38,7 @@ public class CharacterControl : MonoBehaviour
         bool isRunning = Input.GetKey(KeyCode.LeftShift);
         float curSpeedX = canMove ? (isRunning ? runningSpeed : walkingSpeed) * RunAxis.y : 0;
         float curSpeedY = canMove ? (isRunning ? runningSpeed : walkingSpeed) * RunAxis.x : 0;
-        float movementDirectionY = moveDirection.y;
+       float movementDirectionY = moveDirection.y;
         moveDirection = (forward * curSpeedX) + (right * curSpeedY);
         moveDirection.y = movementDirectionY;
         
