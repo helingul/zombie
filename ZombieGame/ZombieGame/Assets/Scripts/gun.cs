@@ -59,9 +59,12 @@ public class gun : MonoBehaviour
         {
             if(hit.rigidbody != null)
             {
-
+                ZombieAI zombie = hit.collider.gameObject.GetComponent<ZombieAI>();
+                zombie.health -= 20;
+                Debug.Log("VURDUN, CANII " + zombie.health);
                 hit.rigidbody.AddForce(-hit.normal * impactForce);
             }
+            
             Quaternion impactRotation = Quaternion.LookRotation(hit.normal);
             GameObject impact = Instantiate(impactEffect, hit.point, impactRotation);
             Destroy(impact, 5);

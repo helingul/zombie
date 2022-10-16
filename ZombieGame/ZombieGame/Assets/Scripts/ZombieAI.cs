@@ -38,6 +38,9 @@ public class ZombieAI : MonoBehaviour
     bool m_IsPatrol;
     bool m_CaughtPlayer;
 
+
+    public int health;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -59,7 +62,8 @@ public class ZombieAI : MonoBehaviour
         navMeshAgent.isStopped = false;
         navMeshAgent.speed = speedWalk;
         navMeshAgent.SetDestination(waypoints[m_CurrentWaypointIndex].position);
-    
+
+        health = 100;
     }
 
     // Update is called once per frame
@@ -75,6 +79,9 @@ public class ZombieAI : MonoBehaviour
         {
             //Patroling();
         }
+        
+        if(health <= 0)
+            Destroy(gameObject);
 
     }
     private void Chasing()
@@ -233,6 +240,8 @@ public class ZombieAI : MonoBehaviour
                 }
             }
         }
+        
+        
     
 }
 
