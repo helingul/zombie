@@ -8,14 +8,16 @@ public class CharacterControl : MonoBehaviour
     public float runningSpeed = 11.5f;
     public float gravity = 20.0f;
     public Camera playerCamera;
-    public float lookSpeed = 2.0f;
+    //public float lookSpeed = 0.5f;
+    public float lookSpeed;
+
     public float lookXLimit = 45.0f;
 
     
 
     [HideInInspector]
     public Vector2 RunAxis;
-    [HideInInspector]
+    //[HideInInspector]
     public Vector2 LookAxis;
 
     CharacterController characterController;

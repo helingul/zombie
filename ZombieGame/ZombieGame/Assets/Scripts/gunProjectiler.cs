@@ -52,6 +52,7 @@ public class gunProjectiler : MonoBehaviour
         // RaycastHit hit;
         muzzleFlash.Play();
         
+        
 
         var bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation);
         bullet.GetComponent<Rigidbody>().velocity = bulletSpawnPoint.forward * bulletSpeed;

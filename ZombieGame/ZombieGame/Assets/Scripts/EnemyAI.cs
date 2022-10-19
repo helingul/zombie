@@ -68,18 +68,20 @@ public class EnemyAI : MonoBehaviour
         {
             CheckIsTooClose();
 
-            //transform.LookAt(player);
+            // transform.LookAt(player);
             // move towards the player
-            navMeshAgent.SetDestination(player.position);
+            // navMeshAgent.SetDestination(player.position + new Vector3(1f, 0f, 1f));
+
+            navMeshAgent.SetDestination(player.position + transform.forward * -2f);
         }
     }
 
     void CheckIsTooClose()
     {
         // DO THE ATTACK IN THIS FUNCTION
-        Debug.Log(dist);
+        
         //if distance between player and enemy is less than 2 it stops 
-        if (dist <= 2)
+        if (dist <= 3)
         {
 
             navMeshAgent.speed = 0;
@@ -131,6 +133,7 @@ public class EnemyAI : MonoBehaviour
     
     public void OnTriggerEnter(Collider collision)
     {
+        
         if (health <= 0 && hasDied == false)
         {
             // if it is dead play animation and stop enemy movement

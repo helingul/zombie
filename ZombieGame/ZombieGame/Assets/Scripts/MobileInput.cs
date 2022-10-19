@@ -21,6 +21,7 @@ public class MobileInput : MonoBehaviour
         fps.RunAxis = joyStick.InputDirection;
    
         fps.LookAxis = TouchField.TouchDist;
+       // fps.LookAxis.y = Mathf.Clamp(fps.LookAxis.y, -3, 1);
 
     }
 }
