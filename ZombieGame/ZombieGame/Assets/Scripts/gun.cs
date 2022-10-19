@@ -57,17 +57,35 @@ public class gun : MonoBehaviour
         muzzleFlash.Play();
         if(Physics.Raycast(fpsCam.position, fpsCam.forward,out hit, range))
         {
-            if(hit.rigidbody != null)
+            /*if(hit.rigidbody != null)
             {
-                ZombieAI zombie = hit.collider.gameObject.GetComponent<ZombieAI>();
-                zombie.health -= 20;
-                Debug.Log("VURDUN, CANII " + zombie.health);
+                Debug.Log("aa");
+                //ZombieAI zombie = hit.collider.gameObject.GetComponent<ZombieAI>();
+                //zombie.health -= 20;
+                //Debug.Log("VURDUN, CANII " + zombie.health);
+
+                EnemyAI enemy = hit.collider.gameObject.GetComponent<EnemyAI>();
+                enemy.health -= 20;
+                Debug.Log("VURDUN, CANII " + enemy.health);
                 hit.rigidbody.AddForce(-hit.normal * impactForce);
             }
-            
+            EnemyAI enemy = hit.transform.gameObject.GetComponent<EnemyAI>();
+            if (enemy != null)
+            {
+                //hit.rigidbody.AddForce(-hit.normal * impactForce);
+
+                enemy.TakeDamage(20);
+                Debug.Log("VURDUN, CANII " + enemy.health);
+            }*/
+           
+
+
+
+
+
             Quaternion impactRotation = Quaternion.LookRotation(hit.normal);
             GameObject impact = Instantiate(impactEffect, hit.point, impactRotation);
-            Destroy(impact, 5);
+           Destroy(impact, 5);
 
         }
     }

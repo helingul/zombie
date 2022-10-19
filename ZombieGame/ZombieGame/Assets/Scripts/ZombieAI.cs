@@ -8,8 +8,11 @@ using UnityEngine.Scripting.APIUpdating;
 public class ZombieAI : MonoBehaviour
 {
     //animation related stuff
-    private Animator animator;
+   // private Animator animator;
 
+
+
+    
 
     public NavMeshAgent navMeshAgent;
     public float startWaitTime = 4;
@@ -26,7 +29,8 @@ public class ZombieAI : MonoBehaviour
     public float edgeDistance = 0.5f;
 
     public Transform[] waypoints;
-    int m_CurrentWaypointIndex = 0;
+    int waypointIndex = 0;
+    Vector3 target;
 
     Vector3 playerLastPosition = Vector3.zero;
     Vector3 m_PlayerPosition;
@@ -46,8 +50,8 @@ public class ZombieAI : MonoBehaviour
     {
 
         //initialize animation
-        animator = GetComponent<Animator>();
-        animator.SetBool("isMoving", true);
+       // animator = GetComponent<Animator>();
+        //animator.SetBool("isMoving", true);
 
         m_PlayerPosition = Vector3.zero;
         m_IsPatrol = true;
@@ -56,33 +60,76 @@ public class ZombieAI : MonoBehaviour
         m_WaitTime = startWaitTime;
         m_TimeToRotate = timeToRotate;
 
-        m_CurrentWaypointIndex = 0;
+
+       // m_CurrentWaypointIndex = 0;
         navMeshAgent = GetComponent<NavMeshAgent>();
 
         navMeshAgent.isStopped = false;
         navMeshAgent.speed = speedWalk;
-        navMeshAgent.SetDestination(waypoints[m_CurrentWaypointIndex].position);
+      //  navMeshAgent.SetDestination(waypoints[m_CurrentWaypointIndex].position);
 
         health = 100;
-    }
 
+        UpdateDestination();
+    }
+   
+    void UpdateDestination()
+    {
+        target = waypoints[waypointIndex].position;
+        navMeshAgent.SetDestination(target);
+    }
+    void IterateWaypointIndex()
+    {
+        waypointIndex++;
+        if(waypointIndex == waypoints.Length)
+        {
+            waypointIndex = 0;
+        }
+    }
     // Update is called once per frame
     void Update()
     {
 
-        EnviromentView();
+       EnviromentView();
         if(!m_IsPatrol)
         {
             Chasing();
+            m_IsPatrol = false;
         }
         else
         {
-            //Patroling();
-        }
-        
-        if(health <= 0)
-            Destroy(gameObject);
+            if (Vector3.Distance(transform.position, target) < 1)
+            {
+                m_IsPatrol = true;
+                IterateWaypointIndex();
+                UpdateDestination();
+            }
 
+        }
+
+        
+
+        
+        if (health <= 0)
+        {
+           // animator.SetBool("isDead", true);
+            navMeshAgent.isStopped = true;
+            navMeshAgent.speed = 0;
+            m_PlayerInRange = false;
+
+        }
+
+
+
+        }
+    IEnumerator checkHealth()
+    {
+        if(health <= 0)
+        {
+           // animator.SetBool("isDead", true);
+            yield return new WaitForSeconds(2);
+    Destroy(gameObject);
+}
     }
     private void Chasing()
     {
@@ -104,7 +151,7 @@ public class ZombieAI : MonoBehaviour
                 Move(speedWalk);
                 m_TimeToRotate = timeToRotate;
                 m_WaitTime = startWaitTime;
-                navMeshAgent.SetDestination(waypoints[m_CurrentWaypointIndex].position);
+            //    navMeshAgent.SetDestination(waypoints[m_CurrentWaypointIndex].position);
 
             }
             else
@@ -122,8 +169,10 @@ public class ZombieAI : MonoBehaviour
     
     private void Patroling()
     {
+        
         if (m_PlayerNear)
         {
+            Debug.Log("aa");
             if (m_TimeToRotate <= 0)
             {
                 Move(speedWalk);
@@ -137,30 +186,36 @@ public class ZombieAI : MonoBehaviour
         }
         else
         {
+            
             m_PlayerNear = false;
             playerLastPosition = Vector3.zero;
-            navMeshAgent.SetDestination(waypoints[m_CurrentWaypointIndex].position);
+           // navMeshAgent.SetDestination(waypoints[m_CurrentWaypointIndex].position);
             if(navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
             {
-                if(m_WaitTime <= 0)
+                Debug.Log("cc");
+                if (m_WaitTime <= 0)
                 {
+                    Debug.Log("dd");
                     NextPoint();
                     Move(speedWalk);
                     m_WaitTime = startWaitTime;
                 }
                 else
                 {
+                    Debug.Log("ee");
                     Stop();
                     m_WaitTime -= Time.deltaTime;
                 }
+                Debug.Log("ff");
             }
         }
+       
     }
     
     void Move(float speed)
     {
         // run animation starts
-        animator.SetBool("isMoving", true);
+        //animator.SetBool("isMoving", true);
 
 
         navMeshAgent.isStopped = false;
@@ -174,7 +229,7 @@ public class ZombieAI : MonoBehaviour
     void Stop()
     {
         // run animation stops
-        animator.SetBool("isMoving", false);
+        //animator.SetBool("isMoving", false);
 
         navMeshAgent.isStopped = true;
         navMeshAgent.speed = 0;
@@ -182,8 +237,8 @@ public class ZombieAI : MonoBehaviour
 
     public void NextPoint()
     {
-        m_CurrentWaypointIndex = (m_CurrentWaypointIndex + 1) % waypoints.Length;
-        navMeshAgent.SetDestination(waypoints[m_CurrentWaypointIndex].position);
+      //  m_CurrentWaypointIndex = (m_CurrentWaypointIndex + 1) % waypoints.Length;
+       // navMeshAgent.SetDestination(waypoints[m_CurrentWaypointIndex].position);
     }
     void LookingPlayer(Vector3 player)
     {
@@ -194,7 +249,7 @@ public class ZombieAI : MonoBehaviour
             {
                 m_PlayerNear = false;
                 Move(speedWalk);
-                navMeshAgent.SetDestination(waypoints[m_CurrentWaypointIndex].position);
+               // navMeshAgent.SetDestination(waypoints[m_CurrentWaypointIndex].position);
                 m_WaitTime = startWaitTime;
                 m_TimeToRotate = timeToRotate;
             }
