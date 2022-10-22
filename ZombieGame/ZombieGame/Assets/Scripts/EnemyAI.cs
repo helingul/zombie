@@ -5,7 +5,7 @@ using UnityEngine.AI;
 public class EnemyAI : MonoBehaviour
 {
     private bool hasDied;
-  
+    private int damageAmount;
 
     public NavMeshAgent navMeshAgent;
     //patrolling 
@@ -130,7 +130,10 @@ public class EnemyAI : MonoBehaviour
             UpdateDestination();
         }
     }
-    
+    public void SetDamageAmount(int damage)
+    {
+        damageAmount = damage;
+    }
     public void OnTriggerEnter(Collider collision)
     {
         
@@ -150,9 +153,10 @@ public class EnemyAI : MonoBehaviour
 
         if (collision.tag== "bullet" && hasDied == false)
         {
+            
             Debug.Log(health);
             // give this the gun damage
-            TakeDamage(20);
+            TakeDamage(damageAmount);
             
         }
         

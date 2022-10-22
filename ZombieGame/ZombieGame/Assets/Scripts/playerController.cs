@@ -7,6 +7,7 @@ using UnityStandardAssets.CrossPlatformInput;
 
 public class playerController : MonoBehaviour
 {
+
     public CharacterController controller;
     public float speed = 15;
     private Vector3 move;
@@ -19,21 +20,13 @@ public class playerController : MonoBehaviour
     public LayerMask groundLayer;
     private bool isGrounded;
 
-   // public Animator animator;
+    //public Animator animator;
 
     InputAction movement;
     InputAction jump;
     InputAction ride;
 
-   // public FixedJoystick joystick;
-
-
-
-    float rotationX = 0;
-    public Camera playerCamera;
-    public Vector2 LookAxis;
-    public float lookSpeed = 2.0f;
-    public float lookXLimit = 45.0f;
+    //public FixedJoystick joystick;
 
     void Start()
     {
@@ -59,27 +52,19 @@ public class playerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        rotationX += -LookAxis.y * lookSpeed;
-        rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
-        playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
-        transform.rotation *= Quaternion.Euler(0, LookAxis.x * lookSpeed, 0);
-
-
-        //float x = Input.GetAxis("Horizontal");
-        //float z = Input.GetAxis("Vertical");
-       
+        float x = Input.GetAxis("Horizontal");
+        float z = Input.GetAxis("Vertical");
         //float x = joystick.Horizontal;
         //float z = joystick.Vertical;
 
         //animator.SetFloat("speed", Mathf.Abs(x) + Mathf.Abs(z));
 
-       // move = transform.right * x + transform.forward * z;
+        move = transform.right * x + transform.forward * z;
 
         controller.Move(move * speed * Time.deltaTime);
 
         isGrounded = Physics.CheckSphere(groundCheck.position, 0.3f, groundLayer);
-  
+
         if (isGrounded && velocity.y < 0)
             velocity.y = -1f;
 
@@ -102,7 +87,6 @@ public class playerController : MonoBehaviour
     {
         velocity.y = Mathf.Sqrt(jumpHeight * 2 * -gravity);
     }
-
-
+        
 
 }
