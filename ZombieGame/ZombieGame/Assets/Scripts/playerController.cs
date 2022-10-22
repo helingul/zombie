@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityStandardAssets.CrossPlatformInput;
 
-public class playerController : MonoBehaviour
+public class playerController : MonoSingleton<playerController>
 {
 
     public CharacterController controller;
@@ -28,8 +28,10 @@ public class playerController : MonoBehaviour
 
     //public FixedJoystick joystick;
 
+    public int HP;
     void Start()
     {
+        HP = 100;
         jump = new InputAction("Jump", binding: "<Gamepad>/a");
         jump.AddBinding("<keyboard>/space");
 
@@ -86,6 +88,21 @@ public class playerController : MonoBehaviour
     private void Jump()
     {
         velocity.y = Mathf.Sqrt(jumpHeight * 2 * -gravity);
+    }
+
+    public void TakeDamage(int amount)
+    {
+        if(HP <= 0)
+            return;
+        
+        HP -= amount;
+        Debug.Log("CANIN: " + HP);
+        if (HP <= 0)
+        {
+            Debug.Log("GAME OVER");
+            Destroy(gameObject);
+            HP = 0;
+        } 
     }
         
 

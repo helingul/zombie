@@ -3,9 +3,18 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 /// <summary> Class <c>Utility</c> contains the utility functions for the game. </summary>
-public class Utils : MonoBehaviour
+public class Utils : MonoSingleton<Utils>
 {
     /// <summary> Method <c>FindWithTag</c> finds the first child object of the transform that has the parameter tag. </summary>
+
+    public GameObject patrolPoints;
+
+    public GameObject PatrolPoints
+    {
+        get => patrolPoints;
+        set => patrolPoints = value;
+    }
+
     public static Transform FindWithTag(Transform transform, string tag)
     {
         var childCount = transform.childCount;

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,11 +23,22 @@ public class gunProjectiler : MonoBehaviour
     public Transform bulletSpawnPoint;
     public GameObject bulletPrefab;
     public float bulletSpeed = 10;
+
+
+    private void OnEnable()
+    {
+        //throw new NotImplementedException();
+    }
+
     void Start()
     {
         ammoManager = ammoManager.instance;
-        EnemyAI zombie = enemy.GetComponent<EnemyAI>();
-        zombie.SetDamageAmount(damageAmount);
+
+        gunBullet bulletOnGun = bulletPrefab.GetComponent<gunBullet>();
+        bulletOnGun.gunDamage = damageAmount;
+        
+        /*EnemyAI zombie = enemy.GetComponent<EnemyAI>();
+        zombie.SetDamageAmount(damageAmount);*/
 
         shoot = new InputAction("Shoot", binding: "<mouse>/leftButton");
         shoot.AddBinding("<Gamepad>/x");

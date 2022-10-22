@@ -5,11 +5,12 @@ using UnityEngine.AI;
 public class EnemyAI : MonoBehaviour
 {
     private bool hasDied;
-    private int damageAmount;
+    private bool isAttacking = false;
+    private int damageAmount = 20;
 
     public NavMeshAgent navMeshAgent;
     //patrolling 
-    public Transform[] waypoints;
+    public Vector3[] waypoints;
     int waypointIndex = 0;
     Vector3 target;
 
@@ -22,7 +23,7 @@ public class EnemyAI : MonoBehaviour
 
 
     //animation related stuff
-   private Animator animator;
+    private Animator animator;
 
     public int health;
 
@@ -40,10 +41,18 @@ public class EnemyAI : MonoBehaviour
         //initialize animation
         animator = GetComponent<Animator>();
         animator.SetBool("isMoving", true);
+
+
+        /*GameObject patrolPoints = Utils.Instance.PatrolPoints;
+        for (int i = 0; i < 4; i++)
+        {
+            Debug.Log(patrolPoints.transform.GetChild(i).transform);
+            waypoints[i] = patrolPoints.transform.GetChild(i).transform;
+        }*/
     }
     void UpdateDestination()
     {
-        target = waypoints[waypointIndex].position;
+        target = waypoints[waypointIndex];
         navMeshAgent.SetDestination(target);
     }
     void IterateWaypointIndex()
@@ -58,6 +67,7 @@ public class EnemyAI : MonoBehaviour
     {
         health = health - hitAmount;
     }
+    
     void ChasePlayer()
     {
      
@@ -87,6 +97,8 @@ public class EnemyAI : MonoBehaviour
             navMeshAgent.speed = 0;
             navMeshAgent.isStopped = true;
             animator.SetBool("isAttacking", true);
+            //StartAttackMovement();
+
         }
         else
         {
@@ -95,10 +107,36 @@ public class EnemyAI : MonoBehaviour
             animator.SetBool("isAttacking", false);
             animator.SetBool("isMoving", true);
         }
+        
+        
+        if (animator.GetBool("isAttacking") && !isAttacking)
+        {
+            playerController.Instance.TakeDamage(damageAmount);
+            isAttacking = true;
+        }
+
+        if (!animator.GetBool("isAttacking"))
+        {
+            isAttacking = false;
+        }
 
     }
 
 
+    /*void StartAttackMovement()
+    {
+        if (animator.GetBool("isAttacking") && !isAttacking)
+        {
+            playerController.Instance.TakeDamage(damageAmount);
+            isAttacking = true;
+        }
+
+        if (!animator.GetBool("isAttacking"))
+        {
+            isAttacking = false;
+        }
+    }*/
+    
     void StopEnemyMovement()
     {
         navMeshAgent.speed = 0;
@@ -129,36 +167,56 @@ public class EnemyAI : MonoBehaviour
             IterateWaypointIndex();
             UpdateDestination();
         }
+        /*if (Vector3.Distance(transform.position, target) < 0.005f)
+        {
+            IterateWaypointIndex();
+            UpdateDestination();
+        }*/
     }
     public void SetDamageAmount(int damage)
     {
         damageAmount = damage;
     }
-    public void OnTriggerEnter(Collider collision)
+
+    private void CheckHealth()
     {
-        
         if (health <= 0 && hasDied == false)
         {
             // if it is dead play animation and stop enemy movement
             hasDied = true;
             navMeshAgent.speed = 0;
             navMeshAgent.isStopped = true;
+            
+            //animator.SetBool("isAttacking", false);
+            //animator.SetBool("isMoving", false);
+            
             animator.SetBool("isDead", true);
-
+            
 
             //StopEnemyMovement();
             Destroy(gameObject, 10);
 
         }
-
-        if (collision.tag== "bullet" && hasDied == false)
+    }
+    
+    public void OnTriggerEnter(Collider collision)
+    {
+        
+        if (collision.CompareTag("bullet") && hasDied == false)
         {
+            gunBullet hitBullet = collision.gameObject.GetComponent<gunBullet>();
             
-            Debug.Log(health);
             // give this the gun damage
-            TakeDamage(damageAmount);
-            
+            TakeDamage(hitBullet.gunDamage);
+            CheckHealth();
+            Debug.Log(health);
+
         }
+
+        /*if (collision.CompareTag("Player") && animator.GetBool("isAttacking"))
+        {
+            playerController.Instance.TakeDamage(damageAmount);
+        }*/
         
     }
 }
