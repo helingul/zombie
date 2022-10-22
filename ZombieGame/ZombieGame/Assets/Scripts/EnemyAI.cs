@@ -77,7 +77,7 @@ public class EnemyAI : MonoBehaviour
         if(dist <= howClose && hasDied == false)
         {
             CheckIsTooClose();
-
+            Attack();
             // transform.LookAt(player);
             // move towards the player
             // navMeshAgent.SetDestination(player.position + new Vector3(1f, 0f, 1f));
@@ -89,7 +89,6 @@ public class EnemyAI : MonoBehaviour
     void CheckIsTooClose()
     {
         // DO THE ATTACK IN THIS FUNCTION
-        
         //if distance between player and enemy is less than 2 it stops 
         if (dist <= 3)
         {
@@ -97,7 +96,7 @@ public class EnemyAI : MonoBehaviour
             navMeshAgent.speed = 0;
             navMeshAgent.isStopped = true;
             animator.SetBool("isAttacking", true);
-            //StartAttackMovement();
+           
 
         }
         else
@@ -109,11 +108,19 @@ public class EnemyAI : MonoBehaviour
         }
         
         
+
+    }
+
+    void Attack()
+    {
+        AnimatorStateInfo currentAnim = animator.GetCurrentAnimatorStateInfo(0);;
+
         if (animator.GetBool("isAttacking") && !isAttacking)
         {
             playerController.Instance.TakeDamage(damageAmount);
             isAttacking = true;
         }
+        
 
         if (!animator.GetBool("isAttacking"))
         {
@@ -190,6 +197,7 @@ public class EnemyAI : MonoBehaviour
             //animator.SetBool("isAttacking", false);
             //animator.SetBool("isMoving", false);
             
+
             animator.SetBool("isDead", true);
             
 
