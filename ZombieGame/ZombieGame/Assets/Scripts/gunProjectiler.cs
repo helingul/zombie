@@ -8,10 +8,11 @@ using UnityStandardAssets.CrossPlatformInput;
 public class gunProjectiler : MonoBehaviour
 {
     InputAction shoot;
+    Animator animator;
     public ParticleSystem muzzleFlash;
     public GameObject impactEffect;
     public int fireRate = 10;
-    private float nextTimeToFire = 0;
+    private float nextTimeToFire = 0.3f;
     public int damageAmount;
     public GameObject enemy;
     [SerializeField] private ammoManager ammoManager;
@@ -32,6 +33,7 @@ public class gunProjectiler : MonoBehaviour
 
     void Start()
     {
+        animator = GetComponent<Animator>();
         ammoManager = ammoManager.instance;
 
         gunBullet bulletOnGun = bulletPrefab.GetComponent<gunBullet>();
@@ -77,6 +79,7 @@ public class gunProjectiler : MonoBehaviour
 
         if (ammoManager.ConsumeAmmo())
         {
+            animator.SetTrigger("shoot");
             // RaycastHit hit;
             muzzleFlash.Play();
 
