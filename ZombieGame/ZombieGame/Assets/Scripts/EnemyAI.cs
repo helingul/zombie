@@ -76,13 +76,28 @@ public class EnemyAI : MonoBehaviour
 
         if(dist <= howClose && hasDied == false)
         {
+
             CheckIsTooClose();
             Attack();
             // transform.LookAt(player);
             // move towards the player
             // navMeshAgent.SetDestination(player.position + new Vector3(1f, 0f, 1f));
 
-            navMeshAgent.SetDestination(player.position + transform.forward * -2f);
+            
+            if (playerController.Instance.isAlive)
+            {
+                navMeshAgent.SetDestination(player.position + transform.forward * -2f);
+
+            }
+            else
+            {
+                //navMeshAgent.SetDestination(target + transform.forward * -2f);
+                navMeshAgent.SetDestination(target);
+            }
+            
+            
+            // navMeshAgent.SetDestination(player.position + transform.forward * -2f);
+
         }
     }
 
@@ -90,7 +105,7 @@ public class EnemyAI : MonoBehaviour
     {
         // DO THE ATTACK IN THIS FUNCTION
         //if distance between player and enemy is less than 2 it stops 
-        if (dist <= 3)
+        if (dist <= 3 && playerController.Instance.isAlive)
         {
 
             navMeshAgent.speed = 0;
@@ -113,9 +128,8 @@ public class EnemyAI : MonoBehaviour
 
     void Attack()
     {
-        AnimatorStateInfo currentAnim = animator.GetCurrentAnimatorStateInfo(0);;
 
-        if (animator.GetBool("isAttacking") && !isAttacking)
+        if (animator.GetBool("isAttacking") && animator.GetBool("isMoving") && !isAttacking)
         {
             playerController.Instance.TakeDamage(damageAmount);
             isAttacking = true;
@@ -166,8 +180,8 @@ public class EnemyAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
 
+      
         ChasePlayer();
         if (Vector3.Distance(transform.position, target) < 1)
         {

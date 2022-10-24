@@ -1,10 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-public class mouseLook : MonoBehaviour
+public class mouseLook : MonoSingleton<mouseLook>
 {
     
     public float senX;
@@ -16,6 +17,26 @@ public class mouseLook : MonoBehaviour
 
     float xRotation;
     float yRotation;
+
+    /*
+     * Triggers when this script gets enabled.
+     */
+    private void OnEnable()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+    
+    /*
+     * Triggers when this script gets disabled.
+     */
+    private void OnDisable()
+    {
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
+    }
+
+
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;

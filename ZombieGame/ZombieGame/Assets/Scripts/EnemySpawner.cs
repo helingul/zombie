@@ -27,6 +27,12 @@ public class EnemySpawner : Spawner
         yield return new WaitForSeconds(SpawnDelay);
         while (SpawnedCount < maxSpawnCount)
         {
+            if (!playerController.Instance.isAlive)
+            {
+                yield return new WaitForSeconds(SpawnInterval);
+                continue;
+            }
+            
             GameObject enemy = Instantiate(enemyPrefab);
             SpawnedCount++;
             Utils.SetSpawnLocation(enemy);

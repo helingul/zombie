@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
@@ -26,8 +27,12 @@ public class playerController : MonoSingleton<playerController>
     InputAction jump;
     InputAction ride;
 
-    //public FixedJoystick joystick;
 
+    public GameOverScreen gameOverScreen;
+    public bool isAlive = true;
+    
+    //public FixedJoystick joystick;
+    
     public int HP;
     void Start()
     {
@@ -49,6 +54,29 @@ public class playerController : MonoSingleton<playerController>
         movement.Enable();
         jump.Enable();
 
+    }
+
+    void OnEnable()
+    {
+        if(isAlive)
+            return;
+
+        isAlive = true;
+        
+        HP = 100;
+        movement.Enable();
+        jump.Enable();
+    }
+
+    private void OnDisable()
+    {
+        movement.Disable();
+        jump.Disable();
+    }
+
+    public void ResetPlayerValues()
+    {
+        
     }
 
     // Update is called once per frame
@@ -96,11 +124,14 @@ public class playerController : MonoSingleton<playerController>
             return;
         
         HP -= amount;
-        Debug.Log("CANIN: " + HP);
+        Debug.Log("CANIN : "+ HP);
+        
+        
         if (HP <= 0)
         {
+            isAlive = false;
             Debug.Log("GAME OVER");
-            Destroy(gameObject);
+            gameOverScreen.SetupScreen();
             HP = 0;
         } 
     }
