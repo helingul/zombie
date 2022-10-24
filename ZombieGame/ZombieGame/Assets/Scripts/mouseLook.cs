@@ -10,6 +10,8 @@ public class mouseLook : MonoBehaviour
     public float senX;
     public float senY;
 
+    public float sensitivity;
+
     public Transform orientation;
 
     float xRotation;
@@ -22,15 +24,23 @@ public class mouseLook : MonoBehaviour
 
     private void Update()
     {
+        xRotation += Input.GetAxisRaw("Mouse Y") * -1 * sensitivity * Time.deltaTime;
+        yRotation += Input.GetAxisRaw("Mouse X") * sensitivity * Time.deltaTime;
+
+        xRotation = Mathf.Clamp(xRotation, -40f, 40f);
+        
+        transform.localEulerAngles = new Vector3(xRotation, yRotation, 0);
+
+        /*
         float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * senX;
         float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * senY;
 
         yRotation += mouseX;
-        xRotation -= mouseY;
+        xRotation += mouseY;
         xRotation = Mathf.Clamp(xRotation, yRotation, 0);
 
         transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
-        orientation.rotation = Quaternion.Euler(0, yRotation, 0);
+        orientation.rotation = Quaternion.Euler(0, yRotation, 0);*/
     }/*
    public float mouseSensitivity = 100f;
     public Transform playerBody;
