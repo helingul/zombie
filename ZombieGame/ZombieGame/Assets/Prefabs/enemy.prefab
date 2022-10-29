@@ -1081,7 +1081,8 @@ MonoBehaviour:
   - {x: 14.7, y: 1, z: -19.65}
   moveSpeed: 10
   howClose: 10
-  health: 100
+  startingHealth: 100
+  lootDropObject: {fileID: 792033578551922522, guid: 78ad5cbac2885e540bc41913896819e4, type: 3}
 --- !u!95 &830856107120574331
 Animator:
   serializedVersion: 4

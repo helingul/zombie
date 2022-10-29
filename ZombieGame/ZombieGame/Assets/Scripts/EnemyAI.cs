@@ -25,7 +25,11 @@ public class EnemyAI : MonoBehaviour
     //animation related stuff
     private Animator animator;
 
-    public int health;
+    public int startingHealth;
+    private int health;
+
+
+    public GameObject lootDropObject;
 
     // Start is called before the first frame update
     void Start()
@@ -49,6 +53,8 @@ public class EnemyAI : MonoBehaviour
             Debug.Log(patrolPoints.transform.GetChild(i).transform);
             waypoints[i] = patrolPoints.transform.GetChild(i).transform;
         }*/
+
+        health = startingHealth;
     }
     void UpdateDestination()
     {
@@ -175,6 +181,18 @@ public class EnemyAI : MonoBehaviour
 
     }
 
+    void SpawnLoot()
+    {
+        for (int i = 0; i < startingHealth/10; i++)
+        {
+            Instantiate(lootDropObject, transform.position + new Vector3
+            (
+                Random.Range(-1,1), 
+                Random.Range(0,3),
+                Random.Range(-1,1)
+            ), Quaternion.identity);
+        }
+    }
     
 
     // Update is called once per frame
@@ -210,8 +228,8 @@ public class EnemyAI : MonoBehaviour
             
             //animator.SetBool("isAttacking", false);
             //animator.SetBool("isMoving", false);
-            
 
+            SpawnLoot();
             animator.SetBool("isDead", true);
             
 
