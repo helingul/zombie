@@ -30,6 +30,9 @@ public class playerController : MonoSingleton<playerController>
 
     public GameOverScreen gameOverScreen;
     public bool isAlive = true;
+
+    public Transform lootCollector;
+    
     
     //public FixedJoystick joystick;
     
